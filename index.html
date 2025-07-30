@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Dự đoán thời tiết hẹ hẹ</title>
+</head>
+<body>
+    <h2>Dự đoán có mưa hay không
+
+    </h2>
+    <form id="form">
+        <label >Nhiệt độ (°C): <input type="number" id="temp" /></label>
+        <label >Độ ẩm (%): <input type="number" id="humidity" /></label>
+        <label >Áp suất (hPa): <input type="number" id="pressure" /></label>
+        <button type="submit">Dự đoán</button>
+    </form>
+
+    <h1 id="result"></h1>
+
+    <script>
+        document.getElementById("form").addEventListener("submit", async (e) => {
+            e.preventDefault()
+            const temperature = parseFloat(document.getElementById("temp").value) 
+            const humidity = parseFloat(document.getElementById("humidity").value) 
+            const pressure = parseFloat(document.getElementById("pressure").value) 
+
+            const response = await fetch("http://localhost:3000/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    temperature,
+                    humidity,
+                    pressure
+                })
+            })
+
+            const data = await response.json()
+            console.log(data)
+            document.getElementById("result").textContent = data.rain ? "Có mưa" : "Không có mưa"
+        })
+    </script>
+</body>
+</html>
